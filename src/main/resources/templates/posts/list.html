@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>list</title>
+</head>
+<body>
+    <h1>List</h1>
+
+    <a href="/posts/new">new</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성일</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="post : ${posts}">
+                <td th:text="${post.id}"></td>
+                <td>
+                    <a th:href="@{/posts/{id}(id=${post.id})}"
+                       th:text="${post.title}"></a>
+                </td>
+                <td th:text="${post.createdAt}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
