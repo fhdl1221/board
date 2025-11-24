@@ -61,4 +61,23 @@ public class PostController {
         postService.deletePost(id);
         return "redirect:/posts";
     }
+
+    @GetMapping("/test/cache")
+    public String testCache() {
+        postService.testFirstLevelCache();
+        return "redirect:/posts";
+    }
+
+    @GetMapping("/test/write-behind")
+    public String testWriteBehind() {
+        postService.testWriteBehind();
+        return "redirect:/posts";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam String keyword, Model model) {
+        List<Post> posts = postService.searchPosts(keyword);
+        model.addAttribute("posts", posts);
+        return "posts/list";
+    }
 }

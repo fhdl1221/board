@@ -34,4 +34,25 @@ public class PostRepository {
     public void delete(Post post) {
         em.remove(post);
     }
+
+    public List<Post> findByTitleContaining(String keyword) {
+        String jpql = "SELECT p FROM Post p WHERE p.title LIKE :keyword";
+        return em.createQuery(jpql, Post.class)
+                .setParameter("keyword", "%" + keyword + "%")
+                .getResultList();
+    }
+
+    // 1. 비영속 (id가 부여되지 않음)
+    // new Post("title", "content")
+
+    // 2. 영속 (id가 부여됨)
+    // em.persist(post);
+
+    // => detach(), clear()
+
+    // 3. 준영속 (detached 수정하는중)
+    // em.detach(post)
+
+    // 4. 삭제
+    // em.remove(post)
 }
