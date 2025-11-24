@@ -12,5 +12,10 @@
     <p th:text="${post.content}"></p>
 
     <a href="/posts">목록</a>
+    <a th:href="@{/posts/{id}/edit(id=${post.id})}">수정</a>
+
+    <form th:action="@{/posts/{id}/delete(id=${post.id})}" method="post">
+        <button type="submit" onclick="return confirm('delete?')">삭제</button>
+    </form>
 </body>
 </html>

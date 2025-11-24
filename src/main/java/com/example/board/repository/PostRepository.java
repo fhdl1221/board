@@ -44,4 +44,14 @@ public class PostRepository {
         String sql = "INSERT INTO post (title, content) VALUES (?, ?)";
         jdbcTemplate.update(sql, postDto.getTitle(), postDto.getContent());
     }
+
+    public void update(Long id, PostDto postDto) {
+        String sql = "UPDATE post SET title = ?, content = ? WHERE id = ?";
+        jdbcTemplate.update(sql, postDto.getTitle(), postDto.getContent(), id);
+    }
+
+    public void delete(Long id) {
+        String sql = "DELETE FROM post WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
 }
