@@ -31,7 +31,9 @@ public class PostController {
             Model model) {
 //        model.addAttribute("posts", postService.getAllPosts());
         Page<Post> postPage = postService.getPostPage(pageable);
-        model.addAttribute("posts", postPage.getContent());
+//        model.addAttribute("posts", postPage.getContent());
+
+        model.addAttribute("postPage", postPage);
         return "posts/list";
     }
 
