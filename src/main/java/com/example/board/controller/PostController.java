@@ -33,7 +33,15 @@ public class PostController {
         Page<Post> postPage = postService.getPostPage(pageable);
 //        model.addAttribute("posts", postPage.getContent());
 
+        int currentPage = postPage.getNumber();
+        int totalPages = postPage.getTotalPages();
+        int startPage = Math.max(0, currentPage - 5);
+        int endPage = Math.min(totalPages - 1, currentPage + 5);
+
         model.addAttribute("postPage", postPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
         return "posts/list";
     }
 
