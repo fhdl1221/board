@@ -37,9 +37,10 @@ public class PostService {
 
     public List<Post> getAllPosts() {
 
-        return postRepository.findAll(
-                Sort.by(Sort.Direction.DESC, "id")
-        );
+//        return postRepository.findAll(
+//                Sort.by(Sort.Direction.DESC, "id")
+//        );
+        return postRepository.findALlByOrderByIdDesc();
     }
 
     @Transactional
@@ -97,5 +98,9 @@ public class PostService {
 
     public List<Post> searchPosts(String keyword) {
         return postRepository.findByTitleContaining(keyword);
+    }
+
+    public List<Post> searchPostsByTitleOrContent(String keyword) {
+        return postRepository.findByTitleContainingOrContentContaining(keyword, keyword); // 검색하려고 하는 단어는 하나라서 매개변수는 한개지만 제목, 내용에서 찾는거라 함수에 키워드 2개 전달
     }
 }
