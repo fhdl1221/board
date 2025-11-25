@@ -1,58 +1,31 @@
 package com.example.board.repository;
 
+import java.util.List;
 import com.example.board.entity.Post;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public class PostRepository {
+public interface PostRepository extends JpaRepository<Post,Long> {
+    // 기본 CRUD 메서드
 
-    @PersistenceContext
-    private EntityManager em;
+    // 저장 (INSERT of UPDATE)
+    // Post save(Post entity)
 
-    public Post save(Post post) {
-        em.persist(post);
-        return post;
-    }
+    // 조회
+    // Optional<Post> findById(Long id);
+    // List<Post> findAll();
+    // List<Post> findAll(Sort sort);
 
-    public Post findById(Long id) {
-        return em.find(Post.class, id);
-    }
+    // 삭제
+    // void deleteById(Long id);
+    // void delete(Post entity);
 
-    public List<Post> findAll() {
-        String jpql = "SELECT p FROM Post p";
-        return em.createQuery(jpql, Post.class).getResultList();
-    }
+    // 개수 조회
+    // long count();
 
-    public Post update(Post post) {
-        return em.merge(post);
-    }
+    // 존재 여부 확인
+    // boolean existsById(Long id)
 
-    public void delete(Post post) {
-        em.remove(post);
-    }
-
-    public List<Post> findByTitleContaining(String keyword) {
-        String jpql = "SELECT p FROM Post p WHERE p.title LIKE :keyword";
-        return em.createQuery(jpql, Post.class)
-                .setParameter("keyword", "%" + keyword + "%")
-                .getResultList();
-    }
-
-    // 1. 비영속 (id가 부여되지 않음)
-    // new Post("title", "content")
-
-    // 2. 영속 (id가 부여됨)
-    // em.persist(post);
-
-    // => detach(), clear()
-
-    // 3. 준영속 (detached 수정하는중)
-    // em.detach(post)
-
-    // 4. 삭제
-    // em.remove(post)
+    List<Post> findByTitleContaining(String keyword);
 }

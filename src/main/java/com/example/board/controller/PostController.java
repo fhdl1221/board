@@ -2,9 +2,7 @@ package com.example.board.controller;
 
 import com.example.board.dto.PostDto;
 import com.example.board.entity.Post;
-import com.example.board.repository.PostRepository;
 import com.example.board.service.PostService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
