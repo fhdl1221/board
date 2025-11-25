@@ -3,7 +3,9 @@ package com.example.board.service;
 import com.example.board.entity.Post;
 import com.example.board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,5 +113,18 @@ public class PostService {
 //        return postRepository.findTop3ByOrderByCreatedAtDesc();
 //        return postRepository.findRecentPostsNative();
         return postRepository.findRecentPosts(PageRequest.of(0, 3));
+    }
+
+    public Page<Post> getPostPage(Pageable pageable) {
+        return postRepository.findAll(pageable);
+    }
+
+    // 게시물 자동 대량 게시
+    @Transactional
+    public void createDummyPosts(int count) {
+        for(int i = 1; i <= count; i++) {
+            Post post = new Post(i + "번 제목", "게시물내용");
+            postRepository.save(post);
+        }
     }
 }
