@@ -2,7 +2,10 @@ package com.example.board.repository;
 
 import java.util.List;
 import com.example.board.entity.Post;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -32,6 +35,10 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     // LIKE %keyword%
     List<Post> findByTitleContaining(String keyword);
 
+    // @Query 방식
+    @Query("SELECT p FROM Post p WHERE p.title LIKE %:keyword%")
+    List<Post> searchByTitle(@Param("keyword") String keyword);
+
     // LIKE keyword%
     List<Post> findByTitleStartingWith(String keyword);
 
@@ -43,4 +50,28 @@ public interface PostRepository extends JpaRepository<Post,Long> {
 
     // 제목 or 내용으로 검색
     List<Post> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword);
+
+    // 제목 or 내용으로 검색 @Query
+    @Query("""
+        SELECT p FROM Post p 
+        WHERE p.title LIKE %:keyword% OR p.content LIKE %:keyword%
+        ORDER BY p.createdAt DESC 
+    """)
+    List<Post> searchByKeyword(@Param("keyword") String keyword);
+
+    @Query(value = """
+        SELECT * FROM post 
+        WHERE title LIKE %:keyword% 
+        ORDER BY id DESC
+    """, nativeQuery = true)
+    List<Post> searchByTitleNative(@Param("keyword") String keyword);
+
+    // 최근 게시물 3개 출력
+    List<Post> findTop3ByOrderByCreatedAtDesc();
+
+    @Query("SELECT p FROM Post p ORDER BY p.createdAt DESC")
+    List<Post> findRecentPosts(Pageable pageable);
+
+    @Query(value = "SELECT * FROM post ORDER BY created_at DESC LIMIT 3", nativeQuery = true)
+    List<Post> findRecentPostsNative();
 }

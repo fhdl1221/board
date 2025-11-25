@@ -3,6 +3,7 @@ package com.example.board.service;
 import com.example.board.entity.Post;
 import com.example.board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,6 +102,14 @@ public class PostService {
     }
 
     public List<Post> searchPostsByTitleOrContent(String keyword) {
-        return postRepository.findByTitleContainingOrContentContaining(keyword, keyword); // 검색하려고 하는 단어는 하나라서 매개변수는 한개지만 제목, 내용에서 찾는거라 함수에 키워드 2개 전달
+//        return postRepository.findByTitleContainingOrContentContaining(keyword, keyword); // 검색하려고 하는 단어는 하나라서 매개변수는 한개지만 제목, 내용에서 찾는거라 함수에 키워드 2개 전달
+//        return postRepository.searchByKeyword(keyword);
+        return postRepository.searchByTitleNative(keyword);
+    }
+
+    public List<Post> getRecentPosts() {
+//        return postRepository.findTop3ByOrderByCreatedAtDesc();
+//        return postRepository.findRecentPostsNative();
+        return postRepository.findRecentPosts(PageRequest.of(0, 3));
     }
 }
