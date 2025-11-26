@@ -41,4 +41,14 @@ public class Post {
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setPost(this);
+    }
+
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+        comment.setPost(null);
+    }
 }
