@@ -40,7 +40,7 @@ public class PostService {
 //        return postRepository.findAll(
 //                Sort.by(Sort.Direction.DESC, "id")
 //        );
-        return postRepository.findALlByOrderByIdDesc();
+        return postRepository.findAllByOrderByIdDesc();
     }
 
     @Transactional
@@ -131,5 +131,14 @@ public class PostService {
 
     public Slice<Post> getPostSlice(Pageable pageable) {
         return postRepository.findAllBy(pageable);
+    }
+
+    public List<Post> getAllPostsWithFetchJoin() {
+//        return postRepository.findAll();
+        return postRepository.findAllWithComments();
+    }
+
+    public List<Post> getAllPostsWithEntityGraph() {
+        return postRepository.findAllWithCommentsEntityGraph();
     }
 }

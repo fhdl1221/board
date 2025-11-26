@@ -5,6 +5,7 @@ import com.example.board.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -48,7 +49,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     List<Post> findByIdGreaterThan(Long id);
 
     // ORDER BY id DESC
-    List<Post> findALlByOrderByIdDesc();
+    List<Post> findAllByOrderByIdDesc();
 
     // 제목 or 내용으로 검색
     List<Post> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword);
@@ -83,4 +84,12 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     Page<Post> findByTitleContaining(String keyword, Pageable pageable);
 
     Slice<Post> findAllBy(Pageable pageable);
+
+    // findAll() => Jpa 자동생성
+    @Query("SELECT DISTINCT p FROM Post p LEFT JOIN FETCH p.comments")
+    List<Post> findAllWithComments();
+
+    @EntityGraph(attributePaths = {"comments"})
+    @Query("SELECT p FROM Post p")
+    List<Post> findAllWithCommentsEntityGraph();
 }

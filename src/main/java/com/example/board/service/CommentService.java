@@ -41,6 +41,10 @@ public class CommentService {
     public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow();
+
+//        Post post = comment.getPost();
+//        post.removeComment(comment);
+
         commentRepository.delete(comment);
     }
 }

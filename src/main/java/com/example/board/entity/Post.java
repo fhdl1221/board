@@ -28,7 +28,7 @@ public class Post {
     @Column(name = "created_at", updatable = false)  // 이름 변경, 수정 불가능 옵션
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     public Post(String title, String content) {
