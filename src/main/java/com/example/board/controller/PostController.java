@@ -1,7 +1,10 @@
 package com.example.board.controller;
 
+import com.example.board.dto.CommentDto;
 import com.example.board.dto.PostDto;
+import com.example.board.entity.Comment;
 import com.example.board.entity.Post;
+import com.example.board.service.CommentService;
 import com.example.board.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -17,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final CommentService commentService;
 
     @GetMapping
     public String list(
@@ -45,7 +49,12 @@ public class PostController {
     @GetMapping("/{id}")
     public String detail(@PathVariable Long id, Model model) {
         Post post = postService.getPostById(id);
+//        List<Comment> comments = commentService.getCommentsByPostId(id);
+        List<Comment> comments = post.getComments();
+
+        model.addAttribute("comment", new CommentDto());
         model.addAttribute("post", post);
+        model.addAttribute("comments", comments);
         return "posts/detail";
     }
 
@@ -134,5 +143,23 @@ public class PostController {
         Slice<Post> postSlice = postService.getPostSlice(pageable);
         model.addAttribute("postSlice", postSlice);
         return "posts/list-more";
+    }
+
+    @PostMapping("/{postId}/comments")
+    public String createComment(
+            @PathVariable Long postId,
+            @ModelAttribute Comment comment
+            ) {
+        commentService.createComment(postId, comment);
+        return  "redirect:/posts/" + postId;
+    }
+
+    @PostMapping("/{postId}/comments/{cId}/delete")
+    public String deleteComment(
+            @PathVariable Long postId,
+            @PathVariable Long cId
+    ) {
+        commentService.deleteComment(cId);
+        return "redirect:/posts/" + postId;
     }
 }
